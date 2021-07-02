@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+   table {
+     font-family: arial;
+     border-collapse: collapse;
+   }
+   td, th {
+     border: 1px solid black;
+     text-align: left;
+     color: black;
+     padding: 5px;
+   }
+   tr:nth-child(even) {
+     background-color: #587b8b;
+   }
+   tr:nth-child(odd) {
+     background-color: #e5f4fb;
+   }
+   ul {
+     list-style-type: none;
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+   }
+   li button {
+     display: block;
+     background-color: #403E3E;
+     color: white;
+     padding: 25px;
+     text-decoration: none;
+   }
+   li button:hover, li button:active {
+     background-color: black;
+   }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Números pseudo-aleatórios e números primos</h2>
+
+  <div>
+    <ul>
+      <li style = "float:left;">
+        <label> #bits: ➝</label>
+      </li>
+      <li style = "float:left;">
+        <input type="text" id ="bitSize"><br><br>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <ul>
+      <li style = "float:left;">
+        <button onclick="blumBlumShub(document.getElementById('bitSize').value)"> executar Blum Blum Shub </button>
+      </li>
+      <li style = "float:left;">
+        <button onclick="randTest2()"> executar randTest2 </button>
+      </li>
+      <li style = "float:left;">
+        <button onclick="Miller-Rabin()"> executar Miller-Rabin </button>
+      </li>
+      <li style = "float:left;">
+        <button onclick="primaltest2()"> executar primaltest2 </button>
+      </li>
+    </ul>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div id="tables">
+
+    <div id="rng_table">
+      <table>
+        <tr>
+          <th>
+            algoritmo
+          </th>
+          <th>
+            Resultado aleatório (dec)
+          </th>
+          <th>
+            Resultado aleatório (bin)
+          </th>
+          <th>
+            tamanho(bits)
+          </th>
+          <th>
+            tempo-de-execucao
+          </th>
+        </tr>
+        <tr>
+          <td id="randResultNome">
+            Blum Blum Shub
+          </td>
+          <td id="randResult(decimal)">
+            resultado(10)
+          </td>
+          <td id="randResult(bin)">
+            resultado(2)
+          </td>
+          <td id="randResultBits">
+            #bits
+          </td>
+          <td id="randResultExec">
+            tempo exec
+          </td>
+        </tr>
+        <tr>
+          <td id="randResultNome2">
+            alg 2
+          </td>
+          <td id="randResult(decimal)2">
+            resultado(10)
+          </td>
+          <td id="randResult(bin)2">
+            resultado(2)
+          </td>
+          <td id="randResultBits2">
+            #bits
+          </td>
+          <td id="randResultExec2">
+            tempo-exececução
+          </td>
+        </tr>
+      </table>
+      <br>
+      <br>
+    </div>
+
+    <div id="prime_table">
+      <table>
+        <tr>
+          <th>
+            algoritmo
+          </th>
+          <th>
+            primo-gerado (dec)
+          </th>
+          <th>
+            primo-gerado (bin)
+          </th>
+          <th>
+            tamanho(bits)
+          </th>
+          <th>
+            #valores-descartados
+          </th>
+          <th>
+            tempo-de-execucao
+          </th>
+        </tr>
+        <tr>
+          <td id="primeResultNome">
+            millerrabin
+          </td>
+          <td id="primeResultPrime(decimal)">
+            primo(10)
+          </td>
+          <td id="primeResultPrime(bin)">
+            primo(2)
+          </td>
+          <td id="primeResultBits">
+            #bits
+          </td>
+          <td id="primeResultDesc">
+            #valores-descartados
+          </td>
+          <td id="primeResultExec">
+            tempo-de-execucao
+          </td>
+        </tr>
+        <tr>
+          <td id="primeResultNome2">
+            alg2
+          </td>
+          <td id="primeResultPrime(decimal)2">
+            primo(10)
+          </td>
+          <td id="primeResultPrime(bin)2">
+            primo(2)
+          </td>
+          <td id="primeResultBits2">
+            #bits
+          </td>
+          <td id="primeResultDesc2">
+            # valores descartados
+          </td>
+          <td id="primeResultExec2">
+            tempo de execucao
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <script src="javascript/random.js"></script>
+  <script src="javascript/primes.js"></script>
+
+</body>
+</html>
