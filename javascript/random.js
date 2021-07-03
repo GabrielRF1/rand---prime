@@ -7,9 +7,10 @@ function gcd(a, b) {
 }
 
 function blumBlumShub(bits) {
-  var t0 = performance.now();
+  //var t0 = performance.now();
+  console.time('blumBlumShub');
 
-  if (bits == 0) {
+  if (bits <= 0) {
     alert("Entre um tamanho de bits")
     return ;
   }
@@ -23,18 +24,19 @@ function blumBlumShub(bits) {
     seed = Number(new Date());
   }
 
-  let binaryString = "0b";    // Coloca-se 0b no começo para possibilitar
-                              // converter string em número binário, para depois decimal
+  let binaryString = "0b";    // Coloca-se 0b no começo para a conversão
+                              // da string para o número ser entendida como binário -> decimal
   let xi = seed;
   for (let i = 0; i < bits; i++) {
     xi = (xi*xi) % m;        // x(n-1) = (x(n))^2 mod M
     binaryString += (xi%2);  // concatena resto da divisão por dois na string
   }
 
-  var tf = performance.now();
-  document.getElementById("randResultBits").innerHTML = binaryString.slice(2).length;
-  document.getElementById("randResultExec").innerHTML = (tf-t0) + "ms";
-  document.getElementById("randResult(decimal)").innerHTML = Number(binaryString);
+  //var time = performance.now() - t0;
+  console.timeEnd('blumBlumShub');
+  document.getElementById("randResult(decimal)").innerHTML = BigInt(binaryString);
   document.getElementById("randResult(bin)").innerHTML = binaryString.slice(2);
+  document.getElementById("randResultBits").innerHTML = bits;
+  document.getElementById("randResultExec").innerHTML = "verificar console do navegador";//(time).toPrecision(50) + "ms";
   //return {binStr:binaryString.slice(2), dec:Number(binaryString), exec:(tf-t0)};
 }

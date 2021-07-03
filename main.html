@@ -26,7 +26,7 @@
      overflow: hidden;
    }
    li button {
-     display: block;
+     display: inline-block;
      background-color: #403E3E;
      color: white;
      padding: 25px;
@@ -48,22 +48,36 @@
       <li style = "float:left;">
         <input type="text" id ="bitSize"><br><br>
       </li>
+      <li style = "float:right; width:58%">
+        <select name="randomAlg" id="randomAlg"
+        title="Usará o resultado gerado por um dos algoritmos">
+          <option value="invalid">Escolha um algoritmo aleatório</option>
+          <option value="saab">Blum Blum Shub</option>
+          <option value="opel">Alg2</option>
+        </select>
+      </li>
     </ul>
   </div>
+
+  <br>
 
   <div>
     <ul>
       <li style = "float:left;">
-        <button onclick="blumBlumShub(document.getElementById('bitSize').value)"> executar Blum Blum Shub </button>
+        <button onclick="blumBlumShub(document.getElementById('bitSize').value)"
+        title="Entrar a quantidade de bits do numero a ser gerado"> executar Blum Blum Shub </button>
       </li>
       <li style = "float:left;">
-        <button onclick="randTest2()"> executar randTest2 </button>
+        <button onclick="randTest2()"
+        title="Entrar a quantidade de bits do numero a ser gerado"> executar randTest2 </button>
       </li>
       <li style = "float:left;">
-        <button onclick="Miller-Rabin()"> executar Miller-Rabin </button>
+        <button onclick="Miller-Rabin()"
+        title="Usará, a escolha, um dos números aleatórios gerados"> executar Miller-Rabin </button>
       </li>
       <li style = "float:left;">
-        <button onclick="primaltest2()"> executar primaltest2 </button>
+        <button onclick="primaltest2()"
+        title="Usará, a escolha, um dos números aleatórios gerados"> executar primaltest2 </button>
       </li>
     </ul>
   </div>
