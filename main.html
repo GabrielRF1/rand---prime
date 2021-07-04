@@ -53,7 +53,7 @@
         title="Usará o resultado gerado por um dos algoritmos">
           <option value="invalid">Escolha um algoritmo aleatório</option>
           <option value="saab">Blum Blum Shub</option>
-          <option value="opel">Alg2</option>
+          <option value="opel">Park-Miller</option>
         </select>
       </li>
     </ul>
@@ -68,8 +68,8 @@
         title="Entrar a quantidade de bits do numero a ser gerado"> executar Blum Blum Shub </button>
       </li>
       <li style = "float:left;">
-        <button onclick="randTest2()"
-        title="Entrar a quantidade de bits do numero a ser gerado"> executar randTest2 </button>
+        <button onclick="parkMiller(document.getElementById('bitSize').value)"
+        title="Entrar a quantidade de bits do numero a ser gerado"> executar Park-Miller </button>
       </li>
       <li style = "float:left;">
         <button onclick="Miller-Rabin()"
@@ -111,22 +111,22 @@
           <td id="randResultNome">
             Blum Blum Shub
           </td>
-          <td id="randResult(decimal)">
+          <td id="randResult(decimal)1">
             resultado(10)
           </td>
-          <td id="randResult(bin)">
+          <td id="randResult(bin)1">
             resultado(2)
           </td>
-          <td id="randResultBits">
+          <td id="randResultBits1">
             #bits
           </td>
-          <td id="randResultExec">
+          <td id="randResultExec1">
             tempo exec
           </td>
         </tr>
         <tr>
           <td id="randResultNome2">
-            alg 2
+            Park-Miller
           </td>
           <td id="randResult(decimal)2">
             resultado(10)
@@ -172,19 +172,19 @@
           <td id="primeResultNome">
             millerrabin
           </td>
-          <td id="primeResultPrime(decimal)">
+          <td id="primeResultPrime(decimal)1">
             primo(10)
           </td>
-          <td id="primeResultPrime(bin)">
+          <td id="primeResultPrime(bin)1">
             primo(2)
           </td>
-          <td id="primeResultBits">
+          <td id="primeResultBits1">
             #bits
           </td>
-          <td id="primeResultDesc">
+          <td id="primeResultDesc1">
             #valores-descartados
           </td>
-          <td id="primeResultExec">
+          <td id="primeResultExec1">
             tempo-de-execucao
           </td>
         </tr>
