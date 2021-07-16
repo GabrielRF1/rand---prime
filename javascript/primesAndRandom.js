@@ -173,8 +173,12 @@ function millerRabin(randAlg, bits) {
     var i = 50;
     var composite = false;
     test: do {
-        let a = (randAlg == "blum" ? blumBlumShub(bits/2, false) : lCG(bits/2, false));
+        let smaller = Math.ceil(bits/8);
+        let a = (randAlg == "blum" ? blumBlumShub(smaller, false) : lCG(smaller, false));
         a += BigInt(2);
+        if (bits>=32) {
+          alert("morreu: "+a+"**"+d+" % "+toTest); //não cabe no BigInt. despair
+        }
         let base = a**d % toTest;
 
         if (base == BigInt(1) || base == (toTest - BigInt(1)))
