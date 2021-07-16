@@ -175,7 +175,7 @@ function millerRabin(randAlg, bits) {
     test: do {
         let smaller = Math.ceil(bits/8);
         let a = (randAlg == "blum" ? blumBlumShub(smaller, false) : lCG(smaller, false));
-        a += BigInt(2);
+        if (a < 2) a += BigInt(2);
         if (bits>=32) {
           alert("morreu: "+a+"**"+d+" % "+toTest); //não cabe no BigInt. despair
         }
@@ -207,5 +207,47 @@ function millerRabin(randAlg, bits) {
   //bits, compositeCount, "1");
 }
 
+// Fermat
+function fermat(randAlg, bits) {
+  console.time("fermat");
+  let compositeCount = 0;
+  tryRandom: do {
+    let mask = generateMask(bits); // forçar o numero aleatório a ter 'bits' bits e ser impar
 
+    let toTest;
+    if (randAlg == "blum") {
+        toTest = blumBlumShub(bits, false);
+    } else
+      toTest = lCG(bits, false);
+
+    toTest |= BigInt(mask);
+
+    //testar algumas vezes
+    var i = 50;
+    var composite = false;
+    test: do {
+      let a = (randAlg == "blum" ? blumBlumShub(bits, false) : lCG(bits, false));
+      a %= (toTest - BigInt(1));
+      if (a < 2) a += BigInt(2);
+
+      if (gcd(toTest, a) != BigInt(1)) {
+        composite = true;
+        compositeCount++;
+        break;
+      }
+      alert(a+"**"+(toTest - BigInt(1))+" % "+ toTest);
+      if ((a**(toTest - BigInt(1))) % toTest != BigInt(1)) {
+        composite = true;
+        compositeCount++;
+        break;
+      }
+
+    } while (--i);
+    if(!composite) {
+      renderPrimeResult("0b"+toTest.toString(2), bits, "2", compositeCount);
+      console.timeEnd("fermat");
+    }
+  } while (composite);
+
+}
 //------------------------------------------------------/

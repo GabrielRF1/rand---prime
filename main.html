@@ -80,9 +80,10 @@
          primalidade"> executar Miller-Rabin </button>
       </li>
       <li style = "float:left;">
-        <button onclick="primaltest2()"
+        <button onclick="fermat(document.getElementById('randomAlg').value,
+        document.getElementById('bitSize').value)"
         title="gera numeros aleatórios com o algoritmo selecionado e testa
-         primalidade"> executar primaltest2 </button>
+         primalidade"> executar Fermat </button>
       </li>
     </ul>
   </div>
@@ -195,7 +196,7 @@
         </tr>
         <tr>
           <td id="primeResultNome2">
-            alg2
+            Fermat
           </td>
           <td id="primeResultPrime(decimal)2">
             primo(10)
