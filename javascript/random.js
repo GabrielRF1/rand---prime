@@ -50,7 +50,7 @@ function blumBlumShub(bits) {
                               // da string para o número ser entendida como binário -> decimal
   let xi = seed;
   for (let i = 0; i < bits; i++) {
-    xi = (xi*xi) % m;        // x(n+1) = (x(n))^2 mod M
+    xi = xi**2 % m;        // x(n+1) = (x(n))^2 mod M
     binaryString += (xi%2);  // concatena resto da divisão por dois na string
   }
 
@@ -70,7 +70,7 @@ function LCG(bits) {
     return ;
   }
 
-  let m = BigInt(Math.pow(2,bits)); // M potencia de 2
+  let m = BigInt(2)**BigInt(bits); // M potencia de 2
   let a = BigInt(541);              // congruente a 5(mod 8)
   let c = BigInt(0);                // c = 0
 
