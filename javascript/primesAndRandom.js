@@ -176,9 +176,9 @@ function millerRabin(randAlg, bits) {
         let smaller = Math.ceil(bits/8);
         let a = (randAlg == "blum" ? blumBlumShub(smaller, false) : lCG(smaller, false));
         if (a < 2) a += BigInt(2);
-        if (bits>=32) {
-          alert("morreu: "+a+"**"+d+" % "+toTest); //não cabe no BigInt. despair
-        }
+        //if (bits>=32) {
+        //  alert("morreu: "+a+"**"+d+" % "+toTest); //não cabe no BigInt. despair
+        //}
         let base = a**d % toTest;
 
         if (base == BigInt(1) || base == (toTest - BigInt(1)))
@@ -235,7 +235,7 @@ function fermat(randAlg, bits) {
         compositeCount++;
         break;
       }
-      alert(a+"**"+(toTest - BigInt(1))+" % "+ toTest);
+      //alert(a+"**"+(toTest - BigInt(1))+" % "+ toTest);
       if ((a**(toTest - BigInt(1))) % toTest != BigInt(1)) {
         composite = true;
         compositeCount++;
