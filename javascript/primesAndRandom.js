@@ -16,6 +16,19 @@ function generateMask(bits) {
   mask += "1";
   return mask;
 }
+
+//a^d mod p
+function powerMod(a, d, p) {
+  let result = BigInt(1);
+  a = a % p;
+  while (d > BigInt(0)) {
+    if (d & BigInt(1))
+      result = (result*a) % p;
+    d = d>>BigInt(1);
+    a = (a*a) % p;
+  }
+  return result;
+}
 //-----------------------------/
 
 //--------------------*-----------------------------/
@@ -100,7 +113,7 @@ function blumBlumShub(bits, render) {
   let xi = seedBlum;
   for (let i = 0; i < bits; i++) {
     xi = xi**2 % m;        // x(n+1) = (x(n))^2 mod M
-    binaryString += (xi%2);  // concatena resto da divisão por dois na string
+    binaryString += (xi%2);  // concatena o ultimo bit de Xi
   }
 
   seedBlum = xi;
@@ -120,18 +133,16 @@ function lCG(bits, render) {
   }
 
   let m = BigInt(2)**BigInt(bits); // M potencia de 2
-  let a = BigInt(541);              // congruente a 5(mod 8)
+  let a = BigInt(127);              // congruente a 5(mod 8)
   let c = BigInt(0);                // c = 0
 
   if (seedLC == BigInt(0)) {
     seedLC = BigInt(new Date()) | BigInt(0b1); // Deve ser impar
-
-    while (gcd(seedLC, m) != 1) {     // Se M e o Seed nao sao co-primos, redesignar seed
-      seedLC = BigInt(new Date()) | BigInt(0b1);
-    }
   }
+
   let xi = seedLC;
-  for (var i = 0; i < 500; i++) {
+  let i = 500;
+  while (1) {
     xi = (a*xi + c) % m;         // x(n+1) = (a*x(n) + c) mod M
     if (xi.toString(2).length == bits)
       break;
@@ -139,7 +150,7 @@ function lCG(bits, render) {
 
   seedLC = xi | BigInt(0b1);
   console.timeEnd('lCG');
-  if(render)
+  if(render && xi.toString(2).length == bits)
     renderRandomResult("0b"+xi.toString(2), xi.toString(2).length, "2");
   return BigInt("0b"+xi.toString(2));
 }
@@ -155,7 +166,7 @@ function millerRabin(randAlg, bits) {
     let mask = generateMask(bits); // forçar o numero aleatório a ter 'bits' bits e ser impar
 
     let toTest;
-    if (randAlg == "blum") {
+    if (randAlg == "blum") { // escolhe algoritmo de PRNG
         toTest = blumBlumShub(bits, false);
     } else
       toTest = lCG(bits, false);
@@ -170,27 +181,28 @@ function millerRabin(randAlg, bits) {
   	}
 
     //testar algumas vezes
-    var i = 50;
+    var i = 200;
     var composite = false;
     test: do {
-        let a = (randAlg == "blum" ? blumBlumShub(bits, false) : lCG(bits, false));
-        a %= (toTest - BigInt(1));
-        if (a < 2) a += BigInt(2);
-        //if (bits>=32) {
-        //  alert("morreu: "+a+"**"+d+" % "+toTest); //não cabe no BigInt. despair
-        //}
-        let base = a**d % toTest;
+        // a aleatório para base; [2 ; toTest-2]
+        let a;
+        do {
+          a = (randAlg == "blum" ? blumBlumShub(bits, false) : lCG(bits, false));
+          a %= (toTest - BigInt(1));
+        } while (a < 2);
+
+        let base = powerMod(a,d,toTest);//a**d % toTest;
 
         if (base == BigInt(1) || base == (toTest - BigInt(1)))
           continue test;
 
         for (var r = BigInt(1); r < s - BigInt(1); r++) {
           base = base*base % toTest;
-          if (base ==  BigInt(1))
+          if (base ==  BigInt(1)) // composto
             break;
-          if (base == toTest - BigInt(1))
+          if (base == toTest - BigInt(1)) // nao eh composto
             continue test;
-        }
+        } //terminou o laço for: composto
         composite = true;
         compositeCount++;
         break;
@@ -202,9 +214,8 @@ function millerRabin(randAlg, bits) {
         console.timeEnd("rabin");
         break;
     }
-  } while(composite /*|| compositeCount == 20*/);
-  //renderPrimeResult("0000", -1,
-  //bits, compositeCount, "1");
+  } while(composite);
+
 }
 
 // Fermat
@@ -223,20 +234,25 @@ function fermat(randAlg, bits) {
     toTest |= BigInt(mask);
 
     //testar algumas vezes
-    var i = 50;
+    var i = 100;
     var composite = false;
     test: do {
-      let a = (randAlg == "blum" ? blumBlumShub(bits, false) : lCG(bits, false));
-      a %= (toTest - BigInt(1));
-      if (a < 2) a += BigInt(2);
+      // gera testemunha a e [2 ; toTest-2]
+      let a;
+      do {
+        a = (randAlg == "blum" ? blumBlumShub(bits, false) : lCG(bits, false));
+        a %= (toTest - BigInt(1));
+      } while (a < 2);
 
+      // Composto
       if (gcd(toTest, a) != BigInt(1)) {
         composite = true;
         compositeCount++;
         break;
       }
-      //alert(a+"**"+(toTest - BigInt(1))+" % "+ toTest);
-      if ((a**(toTest - BigInt(1))) % toTest != BigInt(1)) {
+
+      // Composto
+      if (powerMod(a,(toTest-BigInt(1)),toTest) != BigInt(1)) {
         composite = true;
         compositeCount++;
         break;
@@ -244,6 +260,7 @@ function fermat(randAlg, bits) {
 
     } while (--i);
     if(!composite) {
+      // provavelmente primo
       renderPrimeResult("0b"+toTest.toString(2), bits, "2", compositeCount);
       console.timeEnd("fermat");
     }
