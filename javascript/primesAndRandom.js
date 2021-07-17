@@ -141,11 +141,16 @@ function lCG(bits, render) {
   }
 
   let xi = seedLC;
-  let i = 500;
+  let i = BigInt(0);
   while (1) {
     xi = (a*xi + c) % m;         // x(n+1) = (a*x(n) + c) mod M
+    i++;
     if (xi.toString(2).length == bits)
       break;
+    if (i == m/BigInt(4)) { // se completou um período todo em loop, resseda
+      seedLC = BigInt(new Date()) | BigInt(0b1); // reseed
+      xi= seedLC;
+    }
   }
 
   seedLC = xi | BigInt(0b1);
@@ -237,7 +242,7 @@ function fermat(randAlg, bits) {
     var i = 100;
     var composite = false;
     test: do {
-      // gera testemunha a e [2 ; toTest-2]
+      // gera testemunha a; [2 ; toTest-2]
       let a;
       do {
         a = (randAlg == "blum" ? blumBlumShub(bits, false) : lCG(bits, false));
