@@ -79,11 +79,11 @@ function renderPrimeResult(binaryString, bits, id, descartados) {
 }
 //-------------------------------------------/
 
-//--------------*-------------------/
-//----------- Seeds ---------------/
+//---------------------*----------------------/
+//------------- Seeds / state ---------------/
 var seedBlum = BigInt(0);
 var seedLC = BigInt(0);
-//-----------------------------/
+//----------------------------------------/
 
 //-----------------------*---------------------------------/
 //------------ Random Number Functions -------------------/
@@ -118,8 +118,10 @@ function blumBlumShub(bits, render) {
 
   seedBlum = xi;
   console.timeEnd('blumBlumShub');
+
   if(render)
     renderRandomResult(binaryString, bits, "1");
+
   return BigInt(binaryString);
 }
 
@@ -147,16 +149,20 @@ function lCG(bits, render) {
     i++;
     if (xi.toString(2).length == bits)
       break;
-    if (i == m/BigInt(4)) { // se completou um período todo em loop, resseda
+    // se completou um período todo em loop, resseda
+    if (i == m/BigInt(4)) {
       seedLC = BigInt(new Date()) | BigInt(0b1); // reseed
       xi= seedLC;
+      i = BigInt(0);
     }
   }
 
   seedLC = xi | BigInt(0b1);
   console.timeEnd('lCG');
+
   if(render && xi.toString(2).length == bits)
     renderRandomResult("0b"+xi.toString(2), xi.toString(2).length, "2");
+
   return BigInt("0b"+xi.toString(2));
 }
 //---------------------------------------------------/
@@ -167,9 +173,12 @@ function lCG(bits, render) {
 function millerRabin(randAlg, bits) {
   console.time("rabin");
   let compositeCount = 0;
+  // fica em loop do ~ while até gerar aleatorio primo
   tryRandom: do {
-    let mask = generateMask(bits); // forçar o numero aleatório a ter 'bits' bits e ser impar
+    // forçar o numero aleatório a ter 'bits' bits e ser impar
+    let mask = generateMask(bits);
 
+    // número para testar primalidade
     let toTest;
     if (randAlg == "blum") { // escolhe algoritmo de PRNG
         toTest = blumBlumShub(bits, false);
@@ -196,8 +205,10 @@ function millerRabin(randAlg, bits) {
           a %= (toTest - BigInt(1));
         } while (a < 2);
 
-        let base = powerMod(a,d,toTest);//a**d % toTest;
+        // base = a**d % toTest;
+        let base = powerMod(a,d,toTest);
 
+        // não é composto
         if (base == BigInt(1) || base == (toTest - BigInt(1)))
           continue test;
 
@@ -227,9 +238,12 @@ function millerRabin(randAlg, bits) {
 function fermat(randAlg, bits) {
   console.time("fermat");
   let compositeCount = 0;
+  // fica em loop do ~ while até gerar aleatorio primo
   tryRandom: do {
-    let mask = generateMask(bits); // forçar o numero aleatório a ter 'bits' bits e ser impar
+    // forçar o numero aleatório a ter 'bits' bits e ser impar
+    let mask = generateMask(bits);
 
+    // número para testar primalidade
     let toTest;
     if (randAlg == "blum") {
         toTest = blumBlumShub(bits, false);
