@@ -1,2 +1,2 @@
 # rand---prime
-num sei q q tô fazenu 
+Trabalho individual 2
